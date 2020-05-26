@@ -29,10 +29,10 @@ function draw() {
   
   R = 2.5*Math.min(x_origin, y_origin);
   
-  
-  ctx.clearRect(0,0,canvas.width, canvas.height);
-  
+  ctx.fillStyle = 'rgba(255,255,255,1)';
+  ctx.fillRect(0,0,canvas.width, canvas.height);
 
+  ctx.fillStyle = 'rgba(0,0,0,1)';
   ctx.beginPath();
   ctx.moveTo(x_origin , y_origin - R);
   for (let i = 1; i < 700; i++) {
