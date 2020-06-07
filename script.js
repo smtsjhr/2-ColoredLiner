@@ -1,10 +1,19 @@
+var record_animation = false;
+var name = "image_"
+var total_frames = 200;
+var frame = 0;
+var loop = 0;
+var total_time = 2*Math.PI;
+var rate = total_time/total_frames;
+
+var time = 0;
 
 var r = 0.97;
-var a = 0.2*Math.PI;
+var a = 0.3*Math.PI;
 
 var R;
 
-var rate = 1/(2e3 + 1);
+//var rate = 1/(2e3 + 1);
 
 var get_mouse_pos = false;
 var get_touch_pos = false;
@@ -16,13 +25,13 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 
-startAnimating(60);
+startAnimating(25);
 
 
 function draw() {
  
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = 300; //window.innerWidth;
+  canvas.height = 300; //window.innerHeight;
   
   x_origin = canvas.width/2;
   y_origin = canvas.height/2;
@@ -42,7 +51,7 @@ function draw() {
   ctx.fill('evenodd');
   
   
-  a += rate;
+  a = 0.3*Math.PI + .3*Math.sin(time);
   
   
   
@@ -142,9 +151,35 @@ function startAnimating(fps) {
      elapsed = now - then;
  
      if (elapsed > fpsInterval) {
-         then = now - (elapsed % fpsInterval);
+        then = now - (elapsed % fpsInterval);
      
-         draw();  
-     }
+        draw(); 
+        console.log(frame,time);
+        frame = (frame+1)%total_frames;
+        time = rate*frame;
+        
+        if(record_animation) {
+
+          if (loop === 1) { 
+            let frame_number = frame.toString().padStart(total_frames.toString().length, '0');
+            let filename = name+frame_number+'.png'
+              
+            dataURL = canvas.toDataURL();
+            var element = document.createElement('a');
+            element.setAttribute('href', dataURL);
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+          }
+
+          if (frame + 1 === total_frames) {
+              loop += 1;
+          }
+
+          if (loop === 2) { stop_animation = true }
+        }
+      }
  }
  
